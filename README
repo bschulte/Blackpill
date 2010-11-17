@@ -1,1 +1,7 @@
-THIS IS A FILE IN THE GIT REPOSITORY!!
+Here's the code that I was using to test out the LDT. Unfortunately I didn't save the kernel changes that I made but they were very small. Here are the kernel changes that are needed (2.6.36):
+
+1. Edit ldt.h for user_desc to have a field called dpl_prot that has 2 bits for our custom protection values of LDT entries.
+
+2. Modify fill_ldt in arch/x86/include/asm/desc.h to use info->user_desc's dpl_prot field to fill desc->dpl. Make sure if no dpl_prot is set to default dpl to 0x3 as it is currently. 
+
+3. Make a custom system call (nothing fancy, just append it to an existing .c file) which attempts to overwrite the user value of ds that is saved on the stack with the appropriate descriptor pointing to the value that testldt has put into the LDT. 
